@@ -1,5 +1,5 @@
 <?php
-include_once 'config/cors.php';
+include_once '../config/cors.php';
 
 // API Documentation endpoint
 $endpoints = array(

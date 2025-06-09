@@ -1,7 +1,7 @@
 <?php
-include_once '../config/cors.php';
-include_once '../config/database.php';
-include_once '../models/Admin.php';
+include_once '../../config/cors.php';
+include_once '../../config/database.php';
+include_once '../../models/Admin.php';
 
 $database = new Database();
 $db = $database->getConnection();
