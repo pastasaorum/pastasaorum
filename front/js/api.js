@@ -1,6 +1,6 @@
 // API Service Module
 const API = {
-    baseURL: 'http://localhost/backend/api', // URL para XAMPP
+    baseURL: 'http://localhost/salgados-da-sara/backend/api', // URL corrigida para XAMPP
     
     // Helper para fazer requisições
     async request(endpoint, options = {}) {
@@ -14,12 +14,20 @@ const API = {
         };
 
         try {
+            console.log('Fazendo requisição para:', url); // Debug
             const response = await fetch(url, config);
+            
+            // Log da resposta para debug
+            console.log('Status da resposta:', response.status);
+            console.log('Headers da resposta:', response.headers);
             
             // Check if response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                throw new Error(`Backend não está respondendo JSON. Verifique se o Apache está rodando e se o .htaccess está configurado.`);
+                // Tentar ler como texto para ver o que está sendo retornado
+                const text = await response.text();
+                console.error('Resposta não é JSON:', text);
+                throw new Error(`Backend retornou: ${text.substring(0, 200)}...`);
             }
             
             const data = await response.json();
@@ -31,6 +39,12 @@ const API = {
             return data;
         } catch (error) {
             console.error('API Error:', error);
+            
+            // Verificar se é erro de rede
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                throw new Error('Erro de conexão. Verifique se o XAMPP está rodando e se o backend está acessível.');
+            }
+            
             throw error;
         }
     },
